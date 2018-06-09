@@ -26,4 +26,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Define room relationship
+     * 
+     * @return mixed
+     */
+    public function rooms()
+    {
+        return $this->hasMany(Room::class, 'owner_id');
+    }
 }
