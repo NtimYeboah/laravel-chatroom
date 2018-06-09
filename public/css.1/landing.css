@@ -1,0 +1,70 @@
+.navbar-fixed-top + section{
+	padding-top: 70px;
+}
+.appear{
+	visibility: hidden;
+}
+.animated{
+	-webkit-animation-duration:1s;
+	-moz-animation-duration:1s;
+	-ms-animation-duration:1s;
+	-o-animation-duration:1s;
+	animation-duration:1s;
+}
+
+.h1{font-size: 30px}
+h3{font-size: 30px;font-weight: 300}
+
+.navbar{
+	padding: 10px 0;
+	border: none;
+	-webkit-transition: padding ease-in-out 0.2s;
+    transition: padding ease-in-out 0.2s;
+}
+.navbar-brand img{
+	max-height: 40px;
+}
+.navbar.affix{
+	padding: 0;
+}
+.navbar-nav > li > a{
+	font-weight: bold;
+	text-transform: uppercase;
+	font-size: 12px;
+}
+.navbar-nav .dropdown-submenu .dropdown-menu{
+	left: 0;
+	top: 100%;
+	border: none;
+	background-color: #f5f5f5;
+	min-width: 220px;
+}
+
+.intro{
+	background: url(../images/intro.jpg) #126da7 center top no-repeat;
+	background-size: cover;	
+}
+.intro > div{
+	padding: 15% 0;
+	background-color: #126da7;
+	background-color: rgba(18, 109, 167, 0.75);
+}
+
+.phone-img{
+	margin: 40px auto;
+	max-width: 420px;
+}
+
+/*phone*/
+@media (max-width: 767px) {
+	.navbar-fixed-top + section{
+		padding-top: 50px;
+	}
+	.navbar.affix-top{
+		padding: 0;
+	}
+	.navbar-brand{
+		float: left !important;
+	}
+	.h1{font-size: 20px}
+}
