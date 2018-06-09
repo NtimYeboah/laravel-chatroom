@@ -36,4 +36,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Room::class, 'owner_id');
     }
+
+    /**
+     * Define messages relation
+     * 
+     * @return mixed
+     */
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'user_id');
+    }
 }

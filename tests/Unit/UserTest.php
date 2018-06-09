@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\User;
 use App\Room;
+use App\Message;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -21,5 +22,16 @@ class UserTest extends TestCase
         ]);
 
         $this->assertCount(3, $user->rooms);
+    }
+
+    public function testHasManyRelationshipWithMessage()
+    {
+        $user = factory(User::class)->create();
+
+        $messages = factory(Message::class, 3)->create([
+            'user_id' => $user->id
+        ]);
+
+        $this->assertCount(3, $user->messages);
     }
 }

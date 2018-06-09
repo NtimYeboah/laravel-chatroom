@@ -6,7 +6,7 @@ use App\Room;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class RoomController extends Controller
+class RoomsController extends Controller
 {
     /**
      * Display a listing of the chat rooms.
@@ -27,8 +27,6 @@ class RoomController extends Controller
      */
     public function create()
     {
-        //$room = app(Room::class)->make();
-
         return view('room.create', compact($room));
     }
 
@@ -41,7 +39,7 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => ''
+            'name' => 'required'
         ]);
 
         try {
@@ -57,6 +55,18 @@ class RoomController extends Controller
             ]);
         }
 
-        return redirect()->route('room.index');  
+        return redirect()->route('rooms');  
+    }
+
+    /**
+     * Show room with messages
+     * 
+     * @param mixed $room
+     */
+    public function show(Room $room)
+    {
+        $messages = Room::with('messages')->get();
+
+        return view('room.show', compact('messages'));
     }
 }

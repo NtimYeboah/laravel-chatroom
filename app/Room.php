@@ -24,4 +24,14 @@ class Room extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
+
+    /**
+     * Define room relationship
+     * 
+     * @return mixed
+     */
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'room_id');
+    }
 }

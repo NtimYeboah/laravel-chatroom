@@ -9,12 +9,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RoomTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function testCanCreateRoom()
     {
         $user = factory(User::class)->create();
 
         $response = $this->actingAs($user)
-                        ->post('room/store', [
+                        ->post('rooms/store', [
                             'name' => 'New room'
                         ]);
         
@@ -22,8 +24,5 @@ class RoomTest extends TestCase
             'name' => 'New room',
             'owner_id' => $user->id
         ]);
-
-        $response->assertStatus(302);
-        $response->assertLocation('room/index');
     }
 }
