@@ -7,6 +7,7 @@ $factory->define(App\Room::class, function ($faker) {
 
     return [
         'name' => $faker->name,
+        'description' => $faker->sentence,
         'owner_id' => $owner->id
     ];
 });

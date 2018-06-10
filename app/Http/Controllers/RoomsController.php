@@ -17,7 +17,7 @@ class RoomsController extends Controller
     {
         $rooms = Room::with('owner')->paginate();
 
-        return view('room.index', compact($rooms));
+        return view('rooms.index', compact('rooms'));
     }
 
     /**
@@ -27,7 +27,9 @@ class RoomsController extends Controller
      */
     public function create()
     {
-        return view('room.create', compact($room));
+        $room = app(Room::class);
+
+        return view('rooms.create', compact('room'));
     }
 
     /**
@@ -45,6 +47,7 @@ class RoomsController extends Controller
         try {
             Room::create([
                 'name' => $request->get('name'),
+                'description' => $request->get('description'),
                 'owner_id' => $request->user()->id
             ]);
         } catch (Exception $e) {
@@ -55,7 +58,7 @@ class RoomsController extends Controller
             ]);
         }
 
-        return redirect()->route('rooms');  
+        return redirect()->route('rooms.index');  
     }
 
     /**
