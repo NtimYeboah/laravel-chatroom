@@ -28,13 +28,12 @@ class User extends Authenticatable
     ];
 
     /**
-     * Define room relationship
-     * 
-     * @return mixed
+     * The rooms that this user belongs to
      */
     public function rooms()
     {
-        return $this->hasMany(Room::class, 'owner_id');
+        return $this->belongsToMany(Room::class, 'room_user')
+            ->withTimestamps();
     }
 
     /**
@@ -45,5 +44,15 @@ class User extends Authenticatable
     public function messages()
     {
         return $this->hasMany(Message::class, 'user_id');
+    }
+
+    /**
+     * Add a new room
+     * 
+     * @param \App\Room $room
+     */
+    public function addRoom($room)
+    {
+        return $this->rooms()->attach($room);
     }
 }

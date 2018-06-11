@@ -4,25 +4,24 @@ namespace Tests\Unit;
 
 use App\User;
 use App\Room;
-use App\Message;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UserTest extends TestCase
+class RoomTest extends TestCase
 {
     use RefreshDatabase;
-
-    public function testCanAddRoom()
+    
+    public function testUserCanJoinRoom()
     {
         $user = factory(User::class)->create();
+        
         $room = factory(Room::class)->create();
+        $room->join($user);
 
-        $user->addRoom($room);
+        $found = $room->users->where('id', $user->id)->first();
 
-        $found = $user->rooms->where('id', $room->id)->first();
-
-        $this->assertInstanceOf(Room::class, $found);
-        $this->assertEquals($room->id, $found->id);
+        $this->assertInstanceOf(User::class, $found);
+        $this->assertEquals($user->id, $found->id);  
     }
 }

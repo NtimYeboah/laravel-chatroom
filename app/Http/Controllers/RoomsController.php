@@ -15,7 +15,7 @@ class RoomsController extends Controller
      */
     public function index()
     {
-        $rooms = Room::with('owner')->paginate();
+        $rooms = Room::with('users')->paginate();
 
         return view('rooms.index', compact('rooms'));
     }
@@ -43,19 +43,22 @@ class RoomsController extends Controller
         $this->validate($request, [
             'name' => 'required'
         ]);
-
+        
         try {
-            Room::create([
+            $room = Room::create([
                 'name' => $request->get('name'),
-                'description' => $request->get('description'),
-                'owner_id' => $request->user()->id
+                'description' => $request->get('description')
             ]);
+
+            $request->user()->addRoom($room);
         } catch (Exception $e) {
             Log::error('Exception while creating a chatroom', [
                 'file' => $e->getFile(),
                 'code' => $e->getCode(),
                 'message' => $e->getMessage(),
             ]);
+
+            return back()->withInput();
         }
 
         return redirect()->route('rooms.index');  
@@ -69,7 +72,32 @@ class RoomsController extends Controller
     public function show(Room $room)
     {
         $messages = Room::with('messages')->get();
+        
+        return view('rooms.show', compact('room', 'messages'));
+    }
 
-        return view('room.show', compact('messages'));
+    /**
+     * Allow user to join chat room
+     * 
+     * @param Room $room
+     * @param \Illuminate\Http\Request $request
+     */
+    public function join(Room $room, Request $request) 
+    {
+        try {
+            $room->join($request->user());
+
+            //broadcast event
+        } catch (Exception $e) {
+            Log::error('Exception while joining a chat room', [
+                'file' => $e->getFile(),
+                'code' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ]);
+
+            return back();
+        }
+
+        return redirect()->route('rooms.show', ['room' => $room->id]);
     }
 }

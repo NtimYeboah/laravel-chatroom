@@ -12,17 +12,16 @@ class Room extends Model
      * @return array
      */
     protected $fillable = [
-        'name', 'description', 'owner_id'
+        'name', 'description', 'user_id'
     ];
 
     /**
-     * Define owner relationship
-     * 
-     * @return mixed
+     * The rooms that belongs to the user
      */
-    public function owner()
+    public function users()
     {
-        return $this->belongsTo(User::class, 'owner_id');
+        return $this->belongsToMany(User::class, 'room_user')
+            ->withTimestamps();
     }
 
     /**
@@ -33,5 +32,25 @@ class Room extends Model
     public function messages()
     {
         return $this->hasMany(Message::class, 'room_id');
+    }
+
+    /**
+     * Join a chat room
+     * 
+     * @param \App\User $user
+     */
+    public function join($user)
+    {
+        return $this->users()->attach($user);
+    }
+
+    /**
+     * Leave a chat room
+     * 
+     * @param \App\User $user
+     */
+    public function leave($user)
+    {
+        return $this->users()->detach($user);
     }
 }

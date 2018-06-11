@@ -21,6 +21,6 @@ class RegisterTest extends TestCase
         ]);
 
         $response->assertStatus(302);
-        $response->assertLocation('home');
+        $response->assertLocation('rooms');
     }
 }

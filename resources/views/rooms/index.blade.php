@@ -8,7 +8,7 @@
                 <section class="row m-b-md">
                     <div class="col-sm-6">
                         <h3 class="m-b-xs text-black">Chat Rooms</h3>
-                        <small>Welcome, {{ Auth::user()->name}}</small>
+                        <small>Welcome, {{ Auth::user()->name }}</small>
                     </div>
                     <div class="col-sm-6 text-right text-left-xs m-t-md">
                         <div class="btn-group">
@@ -23,16 +23,22 @@
                         <div class="col-md-4">
                             <section class="panel b-a">
                                 <div class="panel-heading b-b">
-                                    <span class="badge pull-right">12</span>
-                                    <a href="#" class="font-bold">{{$room->name}}</a>
+                                    <span class="badge pull-right">{{ count($room->users) }}</span>
+                                    <a href="{{ route('rooms.show', ['room' => $room->id]) }}" class="font-bold">{{ $room->name }}</a>
                                 </div>
                                 <div class="panel-body">
-                                    <p class="text-bg">{{$room->description}}</p>
-                                    <a href="#" class="btn btn-default btn-sm btn-rounded m-b-xs pull-right"><i class="fa fa-plus"></i> Join</a>
+                                    <p class="text-bg">{{ $room->description }}</p>
+                                    <a href="{{ route('rooms.join', ['room' => $room->id]) }}" class="btn btn-default btn-sm btn-rounded m-b-xs pull-right" onclick="event.preventDefault(); document.getElementById('join-room-form').submit();">
+                                        <i class="fa fa-plus"></i> Join
+                                    </a>
+                                    <form id="join-room-form" action="{{ route('rooms.join', ['room' => $room->id]) }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                    
                                 </div>
                                 <div class="clearfix panel-footer">
                                     <div class="clear">
-                                        <a href="#"><strong>{{$room->owner->name}}</strong></a>
+                                        <a href="#"><strong>{{ $room->users[0]->name }}</strong></a>
                                         <small class="block text-muted">$room->created_at</small>
                                     </div>
                                 </div>

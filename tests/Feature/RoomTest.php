@@ -23,8 +23,7 @@ class RoomTest extends TestCase
         
         $this->assertDatabaseHas('rooms', [
             'name' => 'New room',
-            'description' => 'This is a new room',
-            'owner_id' => $user->id
+            'description' => 'This is a new room'
         ]);
     }
 }
