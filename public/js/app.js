@@ -13915,7 +13915,9 @@ var app = new Vue({
 
             $(selectors.onlineListContainer).append(list);
         }).joining(function (user) {
-            console.log('User from joining', user);
+            var child = '<div><a href="#">' + user.name + '</a></div>';
+
+            $(selectors.onlineListContainer).append(child);
         }).leaving(function (user) {
             console.log('User from leaving', user);
         });

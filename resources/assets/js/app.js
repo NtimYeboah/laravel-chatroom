@@ -41,10 +41,12 @@ const app = new Vue({
                 $(selectors.onlineListContainer).append(list);
             })
             .joining((user) => {
-                console.log('User from joining', user);
+                let child = `<div><a href="#">${user.name}</a></div>`;
+
+                $(selectors.onlineListContainer).append(child);
             })
             .leaving((user) => {
-                console.log('User from leaving', user);
+                //
             });
     }
 
