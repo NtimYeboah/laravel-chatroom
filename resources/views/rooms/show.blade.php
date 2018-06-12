@@ -55,6 +55,7 @@
             <form action="" class="m-t-sm">
             <div class="input-group">
                 <input type="text" class="form-control input-sm rounded" placeholder="Say something">
+                <input type="hidden" id="room-id-input" value="{{$room->id}}">
                 <span class="input-group-btn">
                 <button class="btn btn-sm btn-danger font-bold btn-rounded" type="button">Send</button>
                 </span>
@@ -72,34 +73,10 @@
             <ul class="list-group no-bg no-borders auto m-b-none">
             <li class="list-group-item">
                 <div class="media">
-                <a href="#" class="pull-right m-t-sm">
-                    <span class="badge badge-empty">4</span>
-                </a>
-                
-                <div class="media-body">
-                    <div><a href="#">Julien Reowo</a></div>
-                    <small class="text-muted">14 sec ago</small>
-                </div>
+                    <div class="media-body" id="online-list-container">
+                    </div>
                 </div>
             </li>
-            
-            </ul>
-            <div class="wrapper text-u-c"><strong>Offline</strong></div>
-            <ul class="list-group no-bg no-borders auto">
-            <li class="list-group-item">
-                <div class="media">
-                <a href="#" class="pull-right m-t-sm"><i class="i i-phone"></i></a>
-                <span class="pull-left thumb-sm avatar">
-                    <img src="images/a4.png" alt="..." class="img-circle">
-                    <i class="off b-white bottom"></i>
-                </span>
-                <div class="media-body">
-                    <div><a href="#">Julien Reowo</a></div>
-                    <small class="text-muted">14 sec ago</small>
-                </div>
-                </div>
-            </li>
-            
             </ul>
         </section>
         </section>              

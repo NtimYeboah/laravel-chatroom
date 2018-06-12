@@ -55,4 +55,18 @@ class User extends Authenticatable
     {
         return $this->rooms()->attach($room);
     }
+
+    /**
+     * Check if user has joined room
+     * 
+     * @param mixed $roomId
+     * 
+     * @return bool
+     */
+    public function hasJoined($roomId)
+    {
+        $room = $this->rooms->where('id', $roomId)->first();
+
+        return $room ? true : false;
+    }
 }

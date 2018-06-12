@@ -13,16 +13,32 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
+    private $user;
+
+    private $room;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->user = factory(User::class)->create();
+        $this->room = factory(Room::class)->create();
+    }
+
     public function testCanAddRoom()
     {
-        $user = factory(User::class)->create();
-        $room = factory(Room::class)->create();
+        $this->user->addRoom($this->room);
 
-        $user->addRoom($room);
-
-        $found = $user->rooms->where('id', $room->id)->first();
+        $found = $this->user->rooms->where('id', $this->room->id)->first();
 
         $this->assertInstanceOf(Room::class, $found);
-        $this->assertEquals($room->id, $found->id);
+        $this->assertEquals($this->room->id, $found->id);
+    }
+
+    public function testUserHasJoinedRoom()
+    {
+        $this->room->join($this->user);
+
+        $this->assertTrue($this->user->hasJoined($this->room->id));
     }
 }

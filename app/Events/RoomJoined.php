@@ -49,7 +49,7 @@ class RoomJoined implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('room.' . $this->room->id);
+        return new PresenceChannel('room.' . $this->room->id);
     }
 
     /**

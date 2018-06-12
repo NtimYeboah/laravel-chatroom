@@ -20,3 +20,35 @@ Vue.component('example-component', require('./components/ExampleComponent.vue'))
 const app = new Vue({
     el: '#app'
 });
+
+(function ($, Echo) {
+    const selectors = {
+        roomIdInput: '#room-id-input',
+        onlineListContainer: '#online-list-container'
+    }
+
+    const joinedRoom = function () {
+        let roomId = $(selectors.roomIdInput).val();
+
+        Echo.join(`room.${roomId}`)
+            .here((users) => {
+                let list = '';
+
+                for (let i = 0; i < users.length; i++) {
+                    list += `<div><a href="#">${users[i].name}</a></div>`;
+                }
+                
+                $(selectors.onlineListContainer).append(list);
+            })
+            .joining((user) => {
+                console.log('User from joining', user);
+            })
+            .leaving((user) => {
+                console.log('User from leaving', user);
+            });
+    }
+
+    $(document).ready(function() {
+        joinedRoom();
+    });
+})(window.$, window.Echo);
