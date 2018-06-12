@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Room;
+use App\Events\RoomJoined;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -87,7 +88,7 @@ class RoomsController extends Controller
         try {
             $room->join($request->user());
 
-            //broadcast event
+            event(new RoomJoined($request->user(), $room));
         } catch (Exception $e) {
             Log::error('Exception while joining a chat room', [
                 'file' => $e->getFile(),

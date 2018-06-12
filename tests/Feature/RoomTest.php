@@ -3,7 +3,10 @@
 namespace Tests\Feature;
 
 use App\User;
+use App\Room;
 use Tests\TestCase;
+use App\Events\RoomJoined;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -25,5 +28,21 @@ class RoomTest extends TestCase
             'name' => 'New room',
             'description' => 'This is a new room'
         ]);
+    }
+
+    public function testCanBroadcastRoomJoinedEvent()
+    {
+        Event::fake();
+
+        $user = factory(User::class)->create();
+        $room = factory(Room::class)->create();
+
+        $response = $this->actingAs($user)
+                        ->post('rooms/' . $room->id . '/join');
+
+        Event::assertDispatched(RoomJoined::class, function($e) use ($user, $room) {
+            return $e->user->id === $user->id &&
+                $e->room->id === $room->id;
+        });
     }
 }
