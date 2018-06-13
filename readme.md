@@ -1,60 +1,71 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Learn how to build realtime applications in Laravel
 
-## About Laravel
+This is a simple project to demonstrate how to build realtime applications using Laravel and Pusher or SocketIO. This is a chatting app that performs the following in real-time
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. Notifies connected users when a new user joins
+2. Update messages
+3. Shows who is typing
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+## Installation and Setup
 
-## Learning Laravel
+Clone this repository by running
+```bash
+git clone https://github.com/NtimYeboah/laravel-chatroom.git
+```
+Install the packages by running the composer install command
+```bash
+composer install
+```
+Set your database credentials in the `.env` file
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+Run the migrations
+```base
+php artisan migrate
+```
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+### Pusher
+[Pusher](https://pusher.com/) is a hosted service that makes it super-easy to add real-time data and functionality to web and mobile applications. Since we will be using Pusher, make sure to sign up and get your app credentials. Set the Pusher app credentials in the `.env` as follows
+```
+PUSHER_APP_ID=your-pusher-app-id
+PUSHER_APP_KEY=your-pusher-app-key
+PUSHER_APP_SECRET=your-pusher-app-secret
+PUSHER_APP_CLUSTER=mt1
+```
+Set the `BROADCAST_DRIVER` variable in the `.env` file to `pusher`
+```base
+BROADCAST_DRIVER=pusher
+```
 
-## Laravel Sponsors
+### SocketIO
+[SocketIO](https://socket.io/) enables realtime, bi-directional communication between web clients and servers. If you opt to use SocketIO, do the follow;
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+Set the `BROADCAST_DRIVER` variable in the `.env` file to `socketio`
+```base
+BROADCAST_DRIVER=socketio
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
+### Broadcasting Events
+Since Laravel event broadcasting is done via queued jobs, we need to configure and run a queue listener. If you are not comfortable with Laravel queues, make sure to look at this [repository](https://github.com/NtimYeboah/laravel-queues-example) to learn more. To configure the queue to user redis as the queue driver, set the credentials in the `.env` file.
+```bash
+REDIS_HOST=your-redis-host
+REDIS_PASSWORD=your-redis-password
+REDIS_PORT=6379
+```
+Then set the `QUEUE_DRIVER` to `redis`
+```bash
+QUEUE_DRIVER=redis
+```
+Start the queue.
+```bash
+php artisan queue:work redis
+```
 
-## Contributing
+## Running Application
+Visit the `APP_URL` you set in the `.env` file to see your Laravel application. Register and create a new chat room to get started.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Notify connected users when new users join
+Open up another browser, register a new user and join the chat room created. Notice the new user is added to the list of online users.
 
-## Security Vulnerabilities
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
