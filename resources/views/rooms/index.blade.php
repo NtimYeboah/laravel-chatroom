@@ -24,7 +24,11 @@
                             <section class="panel b-a">
                                 <div class="panel-heading b-b">
                                     <span class="badge pull-right">{{ count($room->users) }}</span>
+                                    @if (Auth::user()->hasJoined($room->id))
                                     <a href="{{ route('rooms.show', ['room' => $room->id]) }}" class="font-bold">{{ $room->name }}</a>
+                                    @else
+                                    <p class="font-bold">{{ $room->name }}</p>
+                                    @endif
                                 </div>
                                 <div class="panel-body">
                                     <p class="text-bg">{{ $room->description }}</p>
@@ -38,7 +42,7 @@
                                 </div>
                                 <div class="clearfix panel-footer">
                                     <div class="clear">
-                                        <a href="#"><strong>{{ $room->users[0]->name }}</strong></a>
+                                        <a><strong>{{ $room->users[0]->name }}</strong></a>
                                         <small class="block text-muted">$room->created_at</small>
                                     </div>
                                 </div>
