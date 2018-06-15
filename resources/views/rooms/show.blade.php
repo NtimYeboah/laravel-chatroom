@@ -52,7 +52,7 @@
                     <button class="btn btn-sm btn-danger font-bold btn-rounded" id="send-msg-btn" type="button">Send</button>
                 </span>
             </div>
-            <small id="whisper-typing"></small>
+            <small id="whisper-typing" style="font-style:italic"></small>
             </form>
         </footer>
         </section>
