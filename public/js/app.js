@@ -13904,9 +13904,12 @@ var app = new Vue({
         sendMsgBtn: '#send-msg-btn',
         roomIdInput: '#room-id-input',
         chatListContainer: '.chat-list',
+        whisperTyping: '#whisper-typing',
+        authUserNameInput: '#auth-user-name-input',
         onlineListContainer: '#online-list-container'
     },
-        roomId = $(selectors.roomIdInput).val();
+        roomId = $(selectors.roomIdInput).val(),
+        authUserName = $(selectors.authUserNameInput).val();
 
     var joinedRoom = function joinedRoom() {
         Echo.join('room.' + roomId).here(function (users) {
@@ -13951,11 +13954,32 @@ var app = new Vue({
         }
     };
 
+    var whisper = function whisper() {
+        console.log('From whisper', authUserName);
+        setTimeout(function () {
+            Echo.private('message').whisper('typing', {
+                name: authUserName
+            });
+        }, 300);
+    };
+
+    var listenForWhisper = function listenForWhisper() {
+        Echo.private('message').listenForWhisper('typing', function (e) {
+            $(selectors.whisperTyping).text(e.name + ' is typing...');
+
+            setTimeout(function () {
+                $(selectors.whisperTyping).text('');
+            }, 900);
+        });
+    };
+
+    $(document.body).on('keypress', selectors.msgInput, whisper);
     $(document.body).on('click', selectors.sendMsgBtn, sendMsg);
 
     $(document).ready(function () {
         joinedRoom();
         msgCreated();
+        listenForWhisper();
     });
 })(window.$, window.Echo);
 

@@ -47,10 +47,12 @@
             <div class="input-group">
                 <input type="text" class="form-control input-sm rounded" id="msg-input" placeholder="Say something">
                 <input type="hidden" id="room-id-input" value="{{$room->id}}">
+                <input type="hidden" id="auth-user-name-input" value="{{Auth::user()->name}}">
                 <span class="input-group-btn">
-                <button class="btn btn-sm btn-danger font-bold btn-rounded" id="send-msg-btn" type="button">Send</button>
+                    <button class="btn btn-sm btn-danger font-bold btn-rounded" id="send-msg-btn" type="button">Send</button>
                 </span>
             </div>
+            <small id="whisper-typing"></small>
             </form>
         </footer>
         </section>
