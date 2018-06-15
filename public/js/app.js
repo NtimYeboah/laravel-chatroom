@@ -13899,13 +13899,16 @@ var app = new Vue({
 
 (function ($, Echo) {
     var selectors = {
+        msgForm: '#msg-form',
+        msgInput: '#msg-input',
+        sendMsgBtn: '#send-msg-btn',
         roomIdInput: '#room-id-input',
+        chatListContainer: '.chat-list',
         onlineListContainer: '#online-list-container'
-    };
+    },
+        roomId = $(selectors.roomIdInput).val();
 
     var joinedRoom = function joinedRoom() {
-        var roomId = $(selectors.roomIdInput).val();
-
         Echo.join('room.' + roomId).here(function (users) {
             var list = '';
 
@@ -13919,12 +13922,40 @@ var app = new Vue({
 
             $(selectors.onlineListContainer).append(child);
         }).leaving(function (user) {
-            console.log('User from leaving', user);
+            //
         });
     };
 
+    var msgCreated = function msgCreated() {
+        Echo.private('room.' + roomId + '.message').listen('MessageCreated', function (e) {
+            //
+        });
+    };
+
+    var sendMsg = function sendMsg() {
+        var msg = $(selectors.msgInput).val();
+
+        if (msg) {
+            axios.post('/messages/store', {
+                body: msg,
+                room_id: roomId
+            }).then(function () {
+                $(selectors.msgInput).val('');
+
+                var chat = '<article class="chat-item right">\n                <section class="chat-body">\n                    <div class="panel b-light text-sm m-b-none">\n                    <div class="panel-body">\n                        <span class="arrow right"></span>\n                        <strong><small class="text-muted"><i class="fa fa-ok text-success"></i></small></strong>\n                        <p class="m-b-none">' + msg + '</p>\n                    </div>\n                    </div>\n                    <small class="text-muted"><i class="fa fa-ok text-success"></i>' + new Date() + '</small>\n                </section>\n            </article>';
+
+                $(selectors.chatListContainer).append(chat);
+            }).catch(function (error) {
+                //
+            });
+        }
+    };
+
+    $(document.body).on('click', selectors.sendMsgBtn, sendMsg);
+
     $(document).ready(function () {
         joinedRoom();
+        msgCreated();
     });
 })(window.$, window.Echo);
 

@@ -30,3 +30,7 @@ Broadcast::channel('room.{roomId}', function ($user, $roomId) {
         ];
     }
 });
+
+Broadcast::channel('room.{roomId}.message', function($user, $roomId) {
+    return $user->hasJoined($roomId);
+});

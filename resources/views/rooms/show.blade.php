@@ -12,32 +12,22 @@
         @if (count($room->messages))
         <section class="w-f scrollable wrapper">              
             <section class="chat-list">
-                <article class="chat-item left">
+                @foreach($room->messages as $message)
+                <article class="chat-item {{ Auth::user()->id === $message->user->id ? 'right': 'left' }} ">
                     <section class="chat-body">
                         <div class="panel b-light text-sm m-b-none">
                         <div class="panel-body">
-                            <span class="arrow left"></span>
-                            <strong><small class="text-muted"><i class="fa fa-ok text-success"></i>Sandy</small></strong>
-                            <p class="m-b-none">Hi John, What's up...</p>
+                            <span class="arrow {{ Auth::user()->id === $message->user->id ? 'right': 'left' }} "></span>
+                            @if (Auth()->user()->id !== $message->user->id)
+                            <strong><small class="text-muted"><i class="fa fa-ok text-success"></i>{{ $message->user->name}}</small></strong>
+                            @endif
+                            <p class="m-b-none">{{ $message->body }}</p>
                         </div>
                         </div>
-                        <small class="text-muted"><i class="fa fa-ok text-success"></i> 1 hour ago</small>
+                        <small class="text-muted"><i class="fa fa-ok text-success"></i>{{ $message->created_at }}</small>
                     </section>
                 </article>
-                
-                
-                <article class="chat-item right">
-                <section class="chat-body">                      
-                    <div class="panel bg-light dk text-sm m-b-none">
-                    <div class="panel-body">
-                        <span class="arrow right"></span>
-                        <strong><small class="text-muted"><i class="fa fa-ok text-success"></i>Me</small></strong>
-                        <p class="m-b-none">Donec eleifend condimentum nisl eu consectetur. </p>
-                    </div>
-                    </div>
-                    <small class="text-muted">5 minutes ago</small>
-                </section>
-                </article>
+                @endforeach
                 
             </section>                    
         </section>
@@ -51,13 +41,14 @@
         </div>
         @endif
 
-        <footer class="footer bg-light lt b-t b-light">
-            <form action="" class="m-t-sm">
+        <footer class="footer bg-light lt b-t b-light" style="padding-top:.5%">
+            <form id="msg-form">
+            @csrf
             <div class="input-group">
-                <input type="text" class="form-control input-sm rounded" placeholder="Say something">
+                <input type="text" class="form-control input-sm rounded" id="msg-input" placeholder="Say something">
                 <input type="hidden" id="room-id-input" value="{{$room->id}}">
                 <span class="input-group-btn">
-                <button class="btn btn-sm btn-danger font-bold btn-rounded" type="button">Send</button>
+                <button class="btn btn-sm btn-danger font-bold btn-rounded" id="send-msg-btn" type="button">Send</button>
                 </span>
             </div>
             </form>

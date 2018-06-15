@@ -27,4 +27,4 @@ Route::group(['prefix' => 'rooms', 'as' => 'rooms.', 'middleware' => ['auth']], 
     Route::post('{room}/join', ['as' => 'join', 'uses' => 'RoomsController@join']);
 });
 
-Route::post('messages/store/{room}', ['as' => 'messages.store', 'uses' => 'MessagesController@store']);
+Route::post('messages/store', ['as' => 'messages.store', 'uses' => 'MessagesController@store']);

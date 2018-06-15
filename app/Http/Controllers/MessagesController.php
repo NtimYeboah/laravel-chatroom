@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Room;
 use App\Message;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Events\MessageCreated;
+use Illuminate\Support\Facades\Log;
 
 class MessagesController extends Controller
 {
@@ -14,18 +17,32 @@ class MessagesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Room $room, Request $request)
+    public function store(Request $request)
     {
-        $this->validate($request, [
-            'body' => 'required'
-        ]);
+        try {
+            $room = Room::findOrFail($request->get('room_id'));
 
-        $message = Message::create([
-            'body' => $request->get('body'),
-            'user_id' => $request->user()->id,
-            'room_id' => $room->id
-        ]);
+            $message = Message::create([
+                'body' => $request->get('body'),
+                'user_id' => $request->user()->id,
+                'room_id' => $room->id
+            ]);
 
-        // Broadcast message created event
+            broadcast(new MessageCreated($message, $room))->toOthers();
+        } catch (Exception $e) {
+            Log::error('Error occurred whiles creating a message', [
+                'file' => $e->getFile(),
+                'code' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ]);
+
+            return response()->json([
+                'msg' => 'Error creating message', 
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return response()->json([
+            'msg' => 'Message created'
+        ], Response::HTTP_CREATED);   
     }
 }

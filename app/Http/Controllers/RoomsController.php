@@ -72,9 +72,9 @@ class RoomsController extends Controller
      */
     public function show(Room $room)
     {
-        $messages = Room::with('messages')->get();
+        $room = $room->load('messages');
         
-        return view('rooms.show', compact('room', 'messages'));
+        return view('rooms.show', compact('room'));
     }
 
     /**

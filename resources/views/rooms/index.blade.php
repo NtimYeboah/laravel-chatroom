@@ -32,9 +32,11 @@
                                 </div>
                                 <div class="panel-body">
                                     <p class="text-bg">{{ $room->description }}</p>
+                                    @if (! Auth::user()->hasJoined($room->id))
                                     <a href="{{ route('rooms.join', ['room' => $room->id]) }}" class="btn btn-default btn-sm btn-rounded m-b-xs pull-right" onclick="event.preventDefault(); document.getElementById('join-room-form').submit();">
                                         <i class="fa fa-plus"></i> Join
                                     </a>
+                                    @endif
                                     <form id="join-room-form" action="{{ route('rooms.join', ['room' => $room->id]) }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
@@ -43,7 +45,6 @@
                                 <div class="clearfix panel-footer">
                                     <div class="clear">
                                         <a><strong>{{ $room->users[0]->name }}</strong></a>
-                                        <small class="block text-muted">$room->created_at</small>
                                     </div>
                                 </div>
                             </section>
