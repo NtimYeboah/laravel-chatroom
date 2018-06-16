@@ -13930,8 +13930,9 @@ var app = new Vue({
     };
 
     var msgCreated = function msgCreated() {
-        Echo.private('room.' + roomId + '.message').listen('MessageCreated', function (e) {
-            //
+        Echo.private('room.' + roomId).listen('MessageCreated', function (e) {
+            // Append message to messages list
+
         });
     };
 
@@ -13955,7 +13956,6 @@ var app = new Vue({
     };
 
     var whisper = function whisper() {
-        console.log('From whisper', authUserName);
         setTimeout(function () {
             Echo.private('message').whisper('typing', {
                 name: authUserName

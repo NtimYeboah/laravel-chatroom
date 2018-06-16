@@ -31,6 +31,6 @@ Broadcast::channel('room.{roomId}', function ($user, $roomId) {
     }
 });
 
-Broadcast::channel('room.{roomId}.message', function($user, $roomId) {
-    return $user->hasJoined($roomId);
+Broadcast::channel('message', function ($user) {
+    return Auth::check();
 });

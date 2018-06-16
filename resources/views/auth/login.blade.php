@@ -27,7 +27,6 @@
                     </label>
                 </p>
 
-                <div class="text-center m-t m-b"><a href="{{ route('password.request') }}"><small>{{ __('Forgot Your Password?') }}</small></a></div>
             </form>
         </section>
     </div>

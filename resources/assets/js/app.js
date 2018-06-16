@@ -57,13 +57,14 @@ const app = new Vue({
     }
 
     const msgCreated = function () {
-        Echo.private(`room.${roomId}.message`)
-            .listen('MessageCreated', (e) => {
-                //
-            }); 
-    }
+        Echo.private(`room.${roomId}`)
+        .listen('MessageCreated', (e) => {
+            // Append message to messages list
 
-    var sendMsg = function () {
+        }); 
+    }
+    
+    const sendMsg = function () {
         let msg = $(selectors.msgInput).val();
 
         if (msg) {
@@ -96,7 +97,7 @@ const app = new Vue({
         }
     }
 
-    var whisper = function () {
+    const whisper = function () {
         setTimeout(function() {
             Echo.private('message')
             .whisper('typing', {
@@ -105,7 +106,7 @@ const app = new Vue({
         }, 300);  
     }
 
-    var listenForWhisper = function () {
+    const listenForWhisper = function () {
         Echo.private('message')
             .listenForWhisper('typing', (e) => {
                 $(selectors.whisperTyping).text(`${e.name} is typing...`);

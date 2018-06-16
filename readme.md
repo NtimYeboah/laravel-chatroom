@@ -68,4 +68,8 @@ Visit the `APP_URL` you set in the `.env` file to see your Laravel application. 
 ### Notify connected users when new users join
 Open up another browser, register a new user and join the chat room created. Notice the new user is added to the list of online users.
 
+### Shows who is typing
+Start tying a message in one browser. Notice a typing indicator is shown below the textarea of the other browser. This makes use of
+client events. Be sure to enable client events when using [Pusher](https://pusher.com/). 
+
 
