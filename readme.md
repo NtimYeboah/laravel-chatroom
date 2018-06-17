@@ -45,7 +45,7 @@ This is a simple project to demonstrate how to build realtime applications using
     * [Show who is typing](#show-who-is-typing)
         + [Broadcast typing event](#broadcast-typing-event)
         + [Listen to typing event](#listen-to-typing-event)
-        + [Define channel](#define-channnel)
+        + [Define message channel](#define-message-channnel)
 
 
 ## Installation and Setup
@@ -568,7 +568,7 @@ const whisper = function () {
 ...
 ```
 
-#### Listen for typing event
+#### Listen to typing event
 
 Let's listen for the `typing` event and prepend the name of the user to the `is typing...` string.
 
@@ -587,7 +587,7 @@ const listenForWhisper = function () {
 ...
 ```
 
-#### Define channel
+#### Define message channel
 We need to authorize a private channel for client events. We will use a channel with name `message` and authorize it for authenticated users.
 
 [https://github.com/NtimYeboah/laravel-chatroom/routes/channel.php]()
