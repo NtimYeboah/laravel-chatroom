@@ -42,7 +42,7 @@ This is a simple project to demonstrate how to build realtime applications using
             - [Define channel](#define-channel)
         + [Channel](#channel)
             - [Authorizing channel](#authorizing-channel)
-    * [Show who's typing](#show-whos-typing)
+    * [Show who is typing](#show-who-is-typing)
         + [Broadcast typing event](#broadcast-typing-event)
         + [Listen to typing event](#listen-to-typing-event)
         + [Define channel](#define-channnel)
@@ -485,7 +485,7 @@ class RoomJoined implements ShouldBroadcast
 ...
 ```
 
-##### Define the queue to place the event on
+##### Define queue
 
 ```php
 ...
@@ -497,7 +497,7 @@ public $broadcastQueue = 'events:room-joined';
 ...
 ```
 
-##### Define the channel the event will be broadcasted on
+##### Define channel
 
 ```php
 ...
@@ -587,7 +587,7 @@ const listenForWhisper = function () {
 ...
 ```
 
-#### Channel
+#### Define channel
 We need to authorize a private channel for client events. We will use a channel with name `message` and authorize it for authenticated users.
 
 [https://github.com/NtimYeboah/laravel-chatroom/routes/channel.php]()
