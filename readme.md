@@ -8,6 +8,44 @@ This is a simple project to demonstrate how to build realtime applications using
 2. Update messages for other users
 3. Show who is typing
 
+## Table of contents
+- [Installation and Setup](#heading)
+    * [Pusher](#pusher)
+    * [SocketIO](#socketIO)
+        + [Install Server](#install-server)
+        + [Setup Configuration file](#setup-config)
+        + [Run Server](#run-server)
+- [Running Application](#running-application)
+    * [Notify connected users](#notify-connected-users)
+    * [Update messages](#update-messages)
+    * [Show who's typing](#show-whos-typing)
+- [Diving Deep](#diving-deep)
+    * [Notify connected users](#notify-connected-users)
+        + [Migrations](#migrations)
+            - [User migration](#user-migration)
+            - [Room migration](#room-migration)
+            - [Room User migration](#room-user-migration)
+        + [Models](#models)
+            - [User model](#user-model)
+            - [Room model](#room-model)
+        + [Routes](#routes)
+        + [Controller](#controller)
+            - [Show list of rooms](#show-list-of-rooms)
+            - [Show form to create a room](#show-form-to-create-a-room)
+            - [Store room](#store-room)
+            - [Join a room](#join-room)
+        + [Event](#event)
+            - [Implement shouldBroadcast interface](#implement-shouldbroadcast-interface)
+            - [Define queue](#define-queue)
+            - [Define channel](#define-channel)
+        + [Channel](#channel)
+            - [Authorizing channel](#authorizing-channel)
+    * [Show who's typing](#show-whos-typing)
+        + [Broadcast typing event](#broadcast-typing-event)
+        + [Listen to typing event](#listen-to-typing-event)
+        + [Define channel](#define-channnel)
+
+
 ## Installation and Setup
 
 Clone this repository by running
