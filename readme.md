@@ -34,7 +34,8 @@ This is a simple project to demonstrate how to build realtime applications using
             - [Show list of rooms](#show-list-of-rooms)
             - [Show form to create a room](#show-form-to-create-a-room)
             - [Store room](#store-room)
-            - [Join a room](#join-room)
+            - [Show a room](#show-a-room)
+            - [Join a room](#join-a-room)
         + [Event](#event)
             - [Implement shouldBroadcast interface](#implement-shouldbroadcast-interface)
             - [Define queue](#define-queue)
@@ -251,7 +252,7 @@ public function hasJoined($roomId)
 ##### Room model
 This defines a `many-to-many` relationship between `room` and `user`, a method for adding a user to a room, a method for joining a room and another for leaving a room.
 
-[https://github.com/NtimYeboah/laravel-chatroom/app/User.php]()
+[https://github.com/NtimYeboah/laravel-chatroom/app/Room.php]()
 
 Users relationship
 
@@ -326,13 +327,13 @@ Route::group(['prefix' => 'rooms', 'as' => 'rooms.', 'middleware' => ['auth']], 
 ...
 ```
 
-#### Controllers
+#### Controller
 
 The `RoomsController` has methods for showing a list of rooms, showing a room, showing a form for creating a room, storing a room and joining a room.
 
 [https://github.com/NtimYeboah/laravel-chatroom/app/Http/Controllers/RoomsController.php]()
 
-##### Showing a list of rooms
+##### Show list of rooms
 A room is shown with its users
 
 ```php
@@ -352,7 +353,7 @@ public function index()
 ...
 ```
 
-##### Showing a form to create room
+##### Show form to create a room
 
 The form for creating a room can be found in `rooms/create.blade.php` directory
 
@@ -373,7 +374,7 @@ public function create()
 ...
 ```
 
-##### Storing a room
+##### Store room
 
 When storing a room, we validate the request and try to save the room. After saving the room, we add it to the list of the user's rooms. If any exception happens, we log it and return back to the form.
 
@@ -413,7 +414,7 @@ public function store(Request $request)
 ...
 ```
 
-##### Showing a room
+##### Show a room
 
 We load the messages when showing a room
 
@@ -433,7 +434,7 @@ public function show(Room $room)
 ...
 ```
 
-##### Joining a room
+##### Join a room
 
 When joining a room, we make use of the `join` method defined in the Room model and then emit the `RoomJoined` event.
 
