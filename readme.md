@@ -11,14 +11,15 @@ This is a simple project to demonstrate how to build realtime applications using
 ## Table of contents
 - [Installation and Setup](#heading)
     * [Pusher](#pusher)
-    * [SocketIO](#socketIO)
+    * [SocketIO](#socketio)
         + [Install Server](#install-server)
-        + [Setup Configuration file](#setup-config)
+        + [Setup Configuration file](#setup-configuration-file)
         + [Run Server](#run-server)
+    * [Broadcasting Events](#broadcasting-events)
 - [Running Application](#running-application)
     * [Notify connected users](#notify-connected-users)
     * [Update messages](#update-messages)
-    * [Show who's typing](#show-whos-typing)
+    * [Show who is typing](#show-who-is-typing)
 - [Diving Deep](#diving-deep)
     * [Notify connected users](#notify-connected-users)
         + [Migrations](#migrations)
@@ -98,7 +99,7 @@ $ laravel-echo-server init
 ```
 Answer accordingly to generate the file.
 
-#### Run the server
+#### Run server
 Start the server in the root of your project directory
 ```bash
 $ laravel-echo-server start
