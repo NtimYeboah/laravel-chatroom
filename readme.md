@@ -16,13 +16,19 @@ git clone https://github.com/NtimYeboah/laravel-chatroom.git
 ```
 Install the packages by running the composer install command
 ```bash
-composer install
+$ composer install
 ```
+
+Install JavaScript dependencies
+```bash
+$ npm install
+```
+
 Set your database credentials in the `.env` file
 
 Run the migrations
 ```base
-php artisan migrate
+$ php artisan migrate
 ```
 
 ### Pusher
@@ -39,11 +45,30 @@ BROADCAST_DRIVER=pusher
 ```
 
 ### SocketIO
-[SocketIO](https://socket.io/) enables realtime, bi-directional communication between web clients and servers. If you opt to use SocketIO, do the follow;
+[SocketIO](https://socket.io/) enables realtime, bi-directional communication between web clients and servers. If you opt to use SocketIO, you need to install a Socket.io server. You can find a Socket.io server which is bundled inside laravel-echo-server (https://github.com/tlaverdure/laravel-echo-server)[https://github.com/tlaverdure/laravel-echo-server]. Make sure you meet the system requirements.
+
+#### Install Server
+Install the package globally with the following command:
+```bash
+$ npm install -g laravel-echo-server
+```
+
+#### Setup configuration file
+Run the init command in your project directory to setup **laravel-echo-server.json** configuration file to manage the configuration of your server.
+```bash
+$ laravel-echo-server init
+```
+Answer accordingly to generate the file.
+
+#### Run the server
+Start the server in the root of your project directory
+```bash
+$ laravel-echo-server start
+```
 
 Set the `BROADCAST_DRIVER` variable in the `.env` file to `socketio`
 ```base
-BROADCAST_DRIVER=socketio
+BROADCAST_DRIVER=redis
 ```
 
 ### Broadcasting Events
@@ -59,7 +84,7 @@ QUEUE_DRIVER=redis
 ```
 Start the queue.
 ```bash
-php artisan queue:work redis
+$ php artisan queue:work redis
 ```
 
 ## Running Application
