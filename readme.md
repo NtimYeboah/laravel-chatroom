@@ -21,7 +21,7 @@ This is a simple project to demonstrate how to build realtime applications using
     * [Update messages](#update-messages)
     * [Show who is typing](#show-who-is-typing)
 - [Diving Deep](#diving-deep)
-    * [Notify connected users](#notify-connected-users)
+    * [Notify connected users when a user comes online](#notify-connected-users-when-a-user-comes-online)
         + [Migrations](#migrations)
             - [User migration](#user-migration)
             - [Room migration](#room-migration)
@@ -187,7 +187,7 @@ This defines a `many-to-many` relationship between `user` and `room`, a method f
 
 [https://github.com/NtimYeboah/laravel-chatroom/app/User.php]()
 
-Room relationship
+Rooms relationship
 
 Use `belongsToMany` method to define the `many-to-many` relationship.
 
@@ -206,7 +206,7 @@ public function rooms()
 ...
 ```
 
-Adding a room to user's rooms
+Adding a room to user's room list
 
 Use the `attach` method on the query builder to insert into the intermediary table after creating a room.
 
@@ -248,6 +248,63 @@ public function hasJoined($roomId)
 }
 ```
 
+##### Room model
+This defines a `many-to-many` relationship between `room` and `user`, a method for adding a user to a room, a method for joining a room and another for leaving a room.
+
+[https://github.com/NtimYeboah/laravel-chatroom/app/User.php]()
+
+Users relationship
+
+Use `belongsToMany` method to define the `many-to-many` relationship.
+
+```php
+...
+/**
+ * The rooms that belongs to the user
+ */
+public function users()
+{
+    return $this->belongsToMany(User::class, 'room_user')
+        ->withTimestamps();
+}
+...
+```
+
+Joining a room
+
+Use the `attach` method on the query builder to insert into the intermediary table.
+
+```php
+...
+/**
+ * Join a chat room
+ * 
+ * @param \App\User $user
+ */
+public function join($user)
+{
+    return $this->users()->attach($user);
+}
+...
+```
+
+Leaving a room
+
+Use the `detach` method on the query builder to remove a user from the intermediary table.
+
+```php
+...
+/**
+ * Leave a chat room
+ * 
+ * @param \App\User $user
+ */
+public function leave($user)
+{
+    return $this->users()->detach($user);
+}
+...
+```
 
 #### Routes
 
