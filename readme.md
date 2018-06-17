@@ -9,7 +9,7 @@ This is a simple project to demonstrate how to build realtime applications using
 3. Show who is typing
 
 ## Table of contents
-- [Installation and Setup](#heading)
+- [Installation and Setup](#installation-and-setup)
     * [Pusher](#pusher)
     * [SocketIO](#socketio)
         + [Install Server](#install-server)
@@ -129,10 +129,10 @@ $ php artisan queue:work redis
 ## Running Application
 Visit the `APP_URL` you set in the `.env` file to see your Laravel application. Register and create a new chat room to get started.
 
-### Notify connected users when a user comes online
+### Notify connected users
 Open up another browser, register a new user and join the chat room created. Notice the new user is added to the list of online users.
 
-### Update messages for other users
+### Update messages
 Send a message. Notice the message is added to the list of the messages in thhe other browser in realtime.
 
 ### Show who is typing
