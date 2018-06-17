@@ -6,7 +6,7 @@ This is a simple project to demonstrate how to build realtime applications using
 
 1. Notify connected users when a user comes online
 2. Update messages for other users
-3. Shows who is typing
+3. Show who is typing
 
 ## Installation and Setup
 
@@ -96,7 +96,7 @@ Open up another browser, register a new user and join the chat room created. Not
 ### Update messages for other users
 Send a message. Notice the message is added to the list of the messages in thhe other browser in realtime.
 
-### Shows who is typing
+### Show who is typing
 Start tying a message in one browser. Notice a typing indicator is shown below the textarea of the other browser. This makes use of
 client events. Be sure to enable client events when using [Pusher](https://pusher.com/). 
 
@@ -446,6 +446,65 @@ Broadcast::channel('room.{roomId}', function ($user, $roomId) {
 });
 ...
 ```
+
+
+### Show who is typing.
+For this feature, we make use of client events. The event will be broadcasted without going the Laravel application.
+
+To broadcast the event, we use Laravel Echo's `whisper` method. To listen to the event, we use the `listenForWhisper` method.
+
+[https://github.com/NtimYeboah/laravel-chatroom/resources/assets/js/app.js]()
+
+#### Broadcast typing event
+We broadcast `typing` event when a user begins to type along with the name of that user.
+
+```javascript
+...
+const whisper = function () {
+    setTimeout(function() {
+        Echo.private('message')
+        .whisper('typing', {
+            name: authUserName
+        });
+    }, 300);  
+}
+...
+```
+
+#### Listen for typing event
+
+Let's listen for the `typing` event and prepend the name of the user to the `is typing...` string.
+
+```javascript
+...
+const listenForWhisper = function () {
+    Echo.private('message')
+        .listenForWhisper('typing', (e) => {
+            $(selectors.whisperTyping).text(`${e.name} is typing...`);
+
+            setTimeout(function () {
+                $(selectors.whisperTyping).text('');
+            }, 900);
+        });
+}
+...
+```
+
+#### Channel
+We need to authorize a private channel for client events. We will use a channel with name `message` and authorize it for authenticated users.
+
+[https://github.com/NtimYeboah/laravel-chatroom/routes/channel.php]()
+
+```php
+...
+Broadcast::channel('message', function ($user) {
+    return Auth::check();
+});
+...
+```
+
+
+
 
 
 
