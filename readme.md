@@ -42,6 +42,9 @@ This is a simple project to demonstrate how to build realtime applications using
             - [Define channel](#define-channel)
         + [Channel](#channel)
             - [Authorizing channel](#authorizing-channel)
+        + [Tests](#tests)
+            - [Unit](#unit)
+            - [Feature](#feature)
     * [Show who is typing](#show-who-is-typing)
         + [Broadcast typing event](#broadcast-typing-event)
         + [Listen to typing event](#listen-to-typing-event)
@@ -542,6 +545,134 @@ Broadcast::channel('room.{roomId}', function ($user, $roomId) {
         ];
     }
 });
+...
+```
+
+#### Tests
+
+For unit, we can test that a user can add a chat room, if a user has joined a chat room and a user able to join a chat room. 
+For feature, we can test if the `RoomJoined` event will be broadcasted when a user joins a room and if the `MessageCreated` event will be broadcasted when a user sends a message.
+
+##### Unit
+
+For `UserTest`, we will test if a user can add a chat room and if a user can join a chat room.
+
+[https://github.com/NtimYeboah/laravel-chatroom/tests/Unit/UserTest.php](https://github.com/NtimYeboah/laravel-chatroom/blob/master/tests/Unit/UserTest.php)
+
+Test can add room
+
+```php
+...
+
+public function testCanAddRoom()
+{
+    $this->user->addRoom($this->room);
+
+    $found = $this->user->rooms->where('id', $this->room->id)->first();
+
+    $this->assertInstanceOf(Room::class, $found);
+    $this->assertEquals($this->room->id, $found->id);
+}
+
+...
+```
+
+Test user has joined Room
+
+```php
+...
+
+public function testUserHasJoinedRoom()
+{
+    $this->room->join($this->user);
+
+    $this->assertTrue($this->user->hasJoined($this->room->id));
+}
+
+...
+```
+
+For `RoomTest`, we will test if a user can join a room.
+
+[https://github.com/NtimYeboah/laravel-chatroom/tests/Unit/RoomTest.php](https://github.com/NtimYeboah/laravel-chatroom/blob/master/tests/Unit/RoomTest.php)
+
+Test user can join room
+
+```php
+...
+
+public function testUserCanJoinRoom()
+{
+    $user = factory(User::class)->create();
+    
+    $room = factory(Room::class)->create();
+    $room->join($user);
+
+    $found = $room->users->where('id', $user->id)->first();
+
+    $this->assertInstanceOf(User::class, $found);
+    $this->assertEquals($user->id, $found->id);  
+}
+
+...
+```
+
+##### Feature
+
+For `RoomTest`, we will test if the `RoomJoined` event will be broadcasted when a user joins a room.
+
+Test can broadcast chat room joined event.
+
+```php
+...
+
+public function testCanBroadcastRoomJoinedEvent()
+{
+    Event::fake();
+
+    $user = factory(User::class)->create();
+    $room = factory(Room::class)->create();
+
+    $response = $this->actingAs($user)
+                    ->post('rooms/' . $room->id . '/join');
+
+    Event::assertDispatched(RoomJoined::class, function($e) use ($user, $room) {
+        return $e->user->id === $user->id &&
+            $e->room->id === $room->id;
+    });
+}
+
+...
+```
+
+For `MessageTest`, we will test if the `MessageCreated` event will be broadcasted when a user sends a message.
+
+Test can broadcast message created event
+
+```php
+...
+
+public function testCanBroadcastMessage()
+{
+    Event::fake();
+
+    $user = factory(User::class)->create();
+    $room = factory(Room::class)->create();
+
+    $response = $this->actingAs($user)
+                    ->post('messages/store', [
+                        'body' => 'Hi, there',
+                        'room_id' => $room->id
+                    ]);
+
+    $message = Message::first();
+
+    Event::assertDispatched(MessageCreated::class, function ($e) use($message, $room) {
+        return $e->message->id === $message->id && 
+            $e->room->id === $room->id;
+    });
+}
+
 ...
 ```
 
