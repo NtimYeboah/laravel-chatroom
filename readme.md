@@ -621,6 +621,8 @@ public function testUserCanJoinRoom()
 
 For `RoomTest`, we will test if the `RoomJoined` event will be broadcasted when a user joins a room.
 
+[https://github.com/NtimYeboah/laravel-chatroom/tests/Feature/RoomTest.php](https://github.com/NtimYeboah/laravel-chatroom/blob/master/tests/Feature/RoomTest.php)
+
 Test can broadcast chat room joined event.
 
 ```php
@@ -646,6 +648,8 @@ public function testCanBroadcastRoomJoinedEvent()
 ```
 
 For `MessageTest`, we will test if the `MessageCreated` event will be broadcasted when a user sends a message.
+
+[https://github.com/NtimYeboah/laravel-chatroom/tests/Feature/MessageTest.php](https://github.com/NtimYeboah/laravel-chatroom/blob/master/tests/Feature/MessageTest.php)
 
 Test can broadcast message created event
 
