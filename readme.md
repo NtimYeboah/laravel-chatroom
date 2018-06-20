@@ -156,7 +156,7 @@ We won't make any modifications to the default `users` migration that comes with
 ##### Room migration
 A room have a name and a description.
 
-[https://github.com/NtimYeboah/laravel-chatroom/database/migrations/2018_06_09_080445_create_rooms_table]()
+[https://github.com/NtimYeboah/laravel-chatroom/blob/master/database/migrations/2018_06_09_080445_create_rooms_table.php](https://github.com/NtimYeboah/laravel-chatroom/database/migrations/2018_06_09_080445_create_rooms_table.php)
 ```php
 ...
 
@@ -170,7 +170,7 @@ $table->string('description');
 
 The `room_user` table is the intermediary table between `users` and `rooms`.
 
-[https://github.com/NtimYeboah/laravel-chatroom/database/migrations/2018_06_09_211834_create_room_user_table.php]()
+[https://github.com/NtimYeboah/laravel-chatroom/blob/master/database/migrations/2018_06_09_211834_create_room_user_table.php](https://github.com/NtimYeboah/laravel-chatroom/database/migrations/2018_06_09_211834_create_room_user_table.php)
 ```php
 ...
 
@@ -186,7 +186,7 @@ The model defines the relationship and methods for adding a room, joining a room
 ##### User Model
 This defines a `many-to-many` relationship between `user` and `room`, a method for adding a room and another method for checking if a user has joined a room.
 
-[https://github.com/NtimYeboah/laravel-chatroom/app/User.php]()
+[https://github.com/NtimYeboah/laravel-chatroom/blob/master/app/User.php](https://github.com/NtimYeboah/laravel-chatroom/app/User.php)
 
 Rooms relationship
 
@@ -252,7 +252,7 @@ public function hasJoined($roomId)
 ##### Room model
 This defines a `many-to-many` relationship between `room` and `user`, a method for adding a user to a room, a method for joining a room and another for leaving a room.
 
-[https://github.com/NtimYeboah/laravel-chatroom/app/Room.php]()
+[https://github.com/NtimYeboah/laravel-chatroom/blob/master/app/Room.php](https://github.com/NtimYeboah/laravel-chatroom/app/Room.php)
 
 Users relationship
 
@@ -311,7 +311,7 @@ public function leave($user)
 
 There is a route for listing rooms, showing a room, showing a form for creating room, storing a room and joining a room.
 
-[https://github.com/NtimYeboah/laravel-chatroom/routes/web.php]()
+[https://github.com/NtimYeboah/laravel-chatroom/blob/master/routes/web.php](https://github.com/NtimYeboah/laravel-chatroom/routes/web.php)
 
 ```php
 ...
@@ -331,7 +331,7 @@ Route::group(['prefix' => 'rooms', 'as' => 'rooms.', 'middleware' => ['auth']], 
 
 The `RoomsController` has methods for showing a list of rooms, showing a room, showing a form for creating a room, storing a room and joining a room.
 
-[https://github.com/NtimYeboah/laravel-chatroom/app/Http/Controllers/RoomsController.php]()
+[https://github.com/NtimYeboah/laravel-chatroom/blob/master/app/Http/Controllers/RoomsController.php](https://github.com/NtimYeboah/laravel-chatroom/app/Http/Controllers/RoomsController.php)
 
 ##### Show list of rooms
 A room is shown with its users
@@ -471,7 +471,7 @@ public function join(Room $room, Request $request)
 
 The `RoomJoined` event is emitted when a user joins a room. The event carries the data that will be sent to the connected browsers via Pusher or Socket.io. The `RoomJoined` event implements the `ShouldBroadcast` interface. It defines the queue the event will be placed on, for this event, it will be placed on `events:room-joined`. It also defines the channel the event will be broadcasted on. The name of the channel is `room.{roomId}`.
 
-[https://github.com/NtimYeboah/laravel-chatroom/app/Events/RoomJoined.php]()
+[https://github.com/NtimYeboah/laravel-chatroom/blob/master/app/Events/RoomJoined.php](https://github.com/NtimYeboah/laravel-chatroom/app/Events/RoomJoined.php)
 
 ##### Implement `shouldBroadcast` interface
 
@@ -522,7 +522,7 @@ public function broadcastOn()
 
 Since `RoomJoined` event defines a Presence Channel, we need to return some data about the user when authorizing the channel. When authorizing the channel, we use the `hasJoined` methods to determine if the user has joined the room or not.
 
-[https://github.com/NtimYeboah/laravel-chatroom/routes/channel.php]()
+[https://github.com/NtimYeboah/laravel-chatroom/blob/master/routes/channels.php](https://github.com/NtimYeboah/laravel-chatroom/routes/channel.php)
 
 ##### Authorizing channel
 
@@ -550,7 +550,7 @@ For this feature, we make use of client events. The event will be broadcasted wi
 
 To broadcast the event, we use Laravel Echo's `whisper` method. To listen to the event, we use the `listenForWhisper` method.
 
-[https://github.com/NtimYeboah/laravel-chatroom/resources/assets/js/app.js]()
+[https://github.com/NtimYeboah/laravel-chatroom/blob/master/resources/assets/js/app.js](https://github.com/NtimYeboah/laravel-chatroom/resources/assets/js/app.js)
 
 #### Broadcast typing event
 We broadcast `typing` event when a user begins to type along with the name of that user.
@@ -590,7 +590,7 @@ const listenForWhisper = function () {
 #### Define message channel
 We need to authorize a private channel for client events. We will use a channel with name `message` and authorize it for authenticated users.
 
-[https://github.com/NtimYeboah/laravel-chatroom/routes/channel.php]()
+[https://github.com/NtimYeboah/laravel-chatroom/blob/master/routes/channels.php](https://github.com/NtimYeboah/laravel-chatroom/routes/channel.php)
 
 ```php
 ...
