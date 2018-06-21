@@ -45,14 +45,4 @@ class MessageCreated implements ShouldBroadcast
     {
         return new PresenceChannel('room.'. $this->message->room_id);
     }
-
-    /**
-     * The event's broadcast name
-     * 
-     * @return string
-     */
-    public function broadcastAs()
-    {
-        return 'message.created';
-    }
 }

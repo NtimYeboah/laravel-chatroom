@@ -17266,6 +17266,9 @@ var app = new Vue({
             //
         }).listen('MessageCreated', function (e) {
             console.log('Event', e);
+            var chat = '<article class="chat-item right">\n                <section class="chat-body">\n                    <div class="panel b-light text-sm m-b-none">\n                    <div class="panel-body">\n                        <span class="arrow right"></span>\n                        <strong><small class="text-muted"><i class="fa fa-ok text-success"></i></small></strong>\n                        <p class="m-b-none">' + e.message.body + '</p>\n                    </div>\n                    </div>\n                    <small class="text-muted"><i class="fa fa-ok text-success"></i>' + e.message.created_at + '</small>\n                </section>\n                </article>';
+
+            $(selectors.chatListContainer).append(chat);
         });
     };
 
