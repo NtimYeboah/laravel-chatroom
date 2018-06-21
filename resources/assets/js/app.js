@@ -53,15 +53,10 @@ const app = new Vue({
             })
             .leaving((user) => {
                 //
+            })
+            .listen('MessageCreated', (e) => {
+                console.log('Event', e);
             });
-    }
-
-    const msgCreated = function () {
-        Echo.private(`room.${roomId}`)
-        .listen('MessageCreated', (e) => {
-            // Append message to messages list
-
-        }); 
     }
     
     const sendMsg = function () {
@@ -122,7 +117,6 @@ const app = new Vue({
 
     $(document).ready(function() {
         joinedRoom();
-        msgCreated();
         listenForWhisper();
     });
 })(window.$, window.Echo);

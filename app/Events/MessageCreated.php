@@ -14,7 +14,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class MessageCreated implements ShouldBroadcast
 {
-    use SerializesModels, InteractsWithSockets;
+    use Dispatchable, SerializesModels, InteractsWithSockets;
 
     /**
      * The queue on which to broadcast the event
@@ -25,21 +25,15 @@ class MessageCreated implements ShouldBroadcast
      * The message to be broadcasted
      */
     public $message;
-    
-    /**
-     * The room on which to broadcast the message
-     */
-    public $room;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Message $message, Room $room)
+    public function __construct(Message $message)
     {
         $this->message = $message;
-        $this->room = $room;
     }
 
     /**
@@ -49,7 +43,7 @@ class MessageCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('room.' . $this->room->id . '.message');
+        return new PresenceChannel('room.'. $this->message->room_id);
     }
 
     /**

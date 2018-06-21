@@ -50,9 +50,8 @@ class MessageTest extends TestCase
 
         $message = Message::first();
 
-        Event::assertDispatched(MessageCreated::class, function ($e) use($message, $room) {
-            return $e->message->id === $message->id && 
-                $e->room->id === $room->id;
+        Event::assertDispatched(MessageCreated::class, function ($e) use($message) {
+            return $e->message->id === $message->id;
         });
     }
 }

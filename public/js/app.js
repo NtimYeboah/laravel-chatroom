@@ -17264,13 +17264,8 @@ var app = new Vue({
             $(selectors.onlineListContainer).append(child);
         }).leaving(function (user) {
             //
-        });
-    };
-
-    var msgCreated = function msgCreated() {
-        Echo.private('room.' + roomId).listen('MessageCreated', function (e) {
-            // Append message to messages list
-
+        }).listen('MessageCreated', function (e) {
+            console.log('Event', e);
         });
     };
 
@@ -17316,7 +17311,6 @@ var app = new Vue({
 
     $(document).ready(function () {
         joinedRoom();
-        msgCreated();
         listenForWhisper();
     });
 })(window.$, window.Echo);

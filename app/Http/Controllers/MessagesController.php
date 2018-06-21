@@ -20,15 +20,13 @@ class MessagesController extends Controller
     public function store(Request $request)
     {
         try {
-            $room = Room::findOrFail($request->get('room_id'));
-
             $message = Message::create([
                 'body' => $request->get('body'),
                 'user_id' => $request->user()->id,
-                'room_id' => $room->id
+                'room_id' => $request->get('room_id')
             ]);
 
-            broadcast(new MessageCreated($message, $room))->toOthers();
+            broadcast(new MessageCreated($message))->toOthers();
         } catch (Exception $e) {
             Log::error('Error occurred whiles creating a message', [
                 'file' => $e->getFile(),
