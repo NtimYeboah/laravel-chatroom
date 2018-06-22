@@ -55,13 +55,12 @@ const app = new Vue({
                 //
             })
             .listen('MessageCreated', (e) => {
-                console.log('Event', e);
                 let chat = `<article class="chat-item right">
                 <section class="chat-body">
                     <div class="panel b-light text-sm m-b-none">
                     <div class="panel-body">
                         <span class="arrow right"></span>
-                        <strong><small class="text-muted"><i class="fa fa-ok text-success"></i></small></strong>
+                        <strong><small class="text-muted"><i class="fa fa-ok text-success"></i>${e.message.user.name}</small></strong>
                         <p class="m-b-none">${e.message.body}</p>
                     </div>
                     </div>

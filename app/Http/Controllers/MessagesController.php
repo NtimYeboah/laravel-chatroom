@@ -26,7 +26,7 @@ class MessagesController extends Controller
                 'room_id' => $request->get('room_id')
             ]);
 
-            broadcast(new MessageCreated($message))->toOthers();
+            broadcast(new MessageCreated($message->load('user')))->toOthers();
         } catch (Exception $e) {
             Log::error('Error occurred whiles creating a message', [
                 'file' => $e->getFile(),
