@@ -1,11 +1,11 @@
 
 ## Learn how to build realtime applications in Laravel
 
-This is a simple project to demonstrate how to build realtime applications using Laravel and Pusher or SocketIO. This is a chatting app that performs the following in real-time
+This is a simple project to demonstrate how to build realtime applications using Laravel and [Pusher](https://pusher.com/) or [SocketIO](https://socket.io/). This is a chatting app that performs the following in real-time
 
 
 1. Notify connected users when a user comes online
-2. Update messages for other users
+2. Broadcast message to other users
 3. Show who is typing
 
 ## Table of contents
@@ -45,6 +45,14 @@ This is a simple project to demonstrate how to build realtime applications using
         + [Tests](#tests)
             - [Unit](#unit)
             - [Feature](#feature)
+    * [Broadcast message to other users](#broadcast-message-to-other-users)
+        + [Migrations](#migrations)
+            - [Message migration](#message-migration)
+        + [Models](#models)
+            + [Message model](#message-model)
+        + [Routes](#routes)
+        + [Controller](#controller)
+        + [Event](#event)
     * [Show who is typing](#show-who-is-typing)
         + [Broadcast typing event](#broadcast-typing-event)
         + [Listen to typing event](#listen-to-typing-event)
@@ -109,7 +117,7 @@ Start the server in the root of your project directory
 $ laravel-echo-server start
 ```
 
-Set the `BROADCAST_DRIVER` variable in the `.env` file to `socketio`
+Set the `BROADCAST_DRIVER` variable in the `.env` file to `redis`
 ```base
 BROADCAST_DRIVER=redis
 ```
@@ -678,6 +686,156 @@ public function testCanBroadcastMessage()
 }
 
 ...
+```
+
+
+### Broadcast message to other users
+We show messages in realtime to other connected clients when a user sends a message. 
+
+#### Migrations
+A user can send many messages, therefore the relationship between users and messages is a `one-to-many`. 
+
+##### Messages migration
+A message will have a body, the sender, and the room
+
+[https://github.com/NtimYeboah/laravel-chatroom/database/migrations/2018_06_09_110334_create_messages_table.php](https://github.com/NtimYeboah/laravel-chatroom/blob/master/database/migrations/2018_06_09_110334_create_messages_table.php)
+
+```php
+...
+
+$table->longText('body');
+$table->bigInteger('user_id')->index();
+$table->bigInteger('room_id')->index();
+
+...
+```
+
+##### Models
+The models define the relationship between a user and messages.
+
+###### User model
+This defines the `hasMany` relationship between user and messages.
+
+[https://github.com/NtimYeboah/laravel-chatroom/app/User.php](https://github.com/NtimYeboah/laravel-chatroom/blob/master/app/User.php)
+
+Messages relationship
+
+```php
+...
+
+/**
+ * Define messages relation
+ * 
+ * @return mixed
+ */
+public function messages()
+{
+    return $this->hasMany(Message::class, 'user_id');
+}
+...
+```
+
+###### Message model
+This defines the reverse relationship between message and user which is `belongsTo`.
+
+User relationship
+
+```php
+...
+
+/**
+ * Define user relationship
+ * 
+ * @return mixed
+ */
+public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
+...
+```
+
+#### Routes
+
+There is only one route for storing a message
+
+[https://github.com/NtimYeboah/laravel-chatroom/routes/web.php](https://github.com/NtimYeboah/laravel-chatroom/blob/master/routes/web.php)
+
+```php
+...
+
+Route::post('messages/store', ['as' => 'messages.store', 'uses' => 'MessagesController@store']);
+
+```
+
+#### Controller
+The `MessagesController` has a method storing a message.
+
+[https://github.com/NtimYeboah/laravel-chatroom/app/Http/Controllers/MessagesController.php](https://github.com/NtimYeboah/laravel-chatroom/blob/master/app/Http/Controllers/MessagesController.php)
+
+##### Store a message
+We validate the request and then store the message. After storing the message, we broadcast and event to the other connected to show the message.
+
+```php
+
+/**
+ * Store a newly created resource in storage.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @return \Illuminate\Http\Response
+ */
+public function store(Request $request)
+{
+    try {
+        $message = Message::create([
+            'body' => $request->get('body'),
+            'user_id' => $request->user()->id,
+            'room_id' => $request->get('room_id')
+        ]);
+
+        broadcast(new MessageCreated($message->load('user')))->toOthers();
+    } catch (Exception $e) {
+        Log::error('Error occurred whiles creating a message', [
+            'file' => $e->getFile(),
+            'code' => $e->getCode(),
+            'message' => $e->getMessage(),
+        ]);
+
+        return response()->json([
+            'msg' => 'Error creating message', 
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    return response()->json([
+        'msg' => 'Message created'
+    ], Response::HTTP_CREATED);   
+}
+
+```
+
+###### Event
+After a message is store, the `MessageCreated` event is broadcasted to the other connected clients. The event is queued on the `events:message-created` queue and authenticated on the `room.{roomId}` channel. Since the message is broadcasted to the other connected clients and the sender is excluded, we need to use `broadcast` with the `toOthers` function. Also we need to use the `InteractsWithSockets` trait in the event.
+
+```php
+/**
+ * The queue on which to broadcast the event
+ */
+public $broadcastQueue = 'events:message-created';
+
+.
+.
+.
+
+/**
+ * Get the channels the event should broadcast on.
+ *
+ * @return \Illuminate\Broadcasting\Channel|array
+ */
+public function broadcastOn()
+{
+    return new PresenceChannel('room.'. $this->message->room_id);
+}
+
 ```
 
 
