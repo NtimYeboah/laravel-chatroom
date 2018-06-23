@@ -769,12 +769,12 @@ Route::post('messages/store', ['as' => 'messages.store', 'uses' => 'MessagesCont
 ```
 
 #### Controller
-The `MessagesController` has a method storing a message.
+The `MessagesController` has a method for storing a message.
 
 [https://github.com/NtimYeboah/laravel-chatroom/app/Http/Controllers/MessagesController.php](https://github.com/NtimYeboah/laravel-chatroom/blob/master/app/Http/Controllers/MessagesController.php)
 
 ##### Store a message
-We validate the request and then store the message. After storing the message, we broadcast and event to the other connected to show the message.
+We validate the request and then store the message. After storing the message, we broadcast an event to the other connected to show the message.
 
 ```php
 
@@ -813,8 +813,10 @@ public function store(Request $request)
 
 ```
 
-###### Event
-After a message is store, the `MessageCreated` event is broadcasted to the other connected clients. The event is queued on the `events:message-created` queue and authenticated on the `room.{roomId}` channel. Since the message is broadcasted to the other connected clients and the sender is excluded, we need to use `broadcast` with the `toOthers` function. Also we need to use the `InteractsWithSockets` trait in the event.
+##### Event
+After a message is stored, the `MessageCreated` event is broadcasted to the other connected clients. The event is queued on the `events:message-created` queue and authenticated on the `room.{roomId}` channel. 
+
+Since the message is broadcasted to the other connected clients and the sender is excluded, we need to use `broadcast` function with the `toOthers` function. Also we need to use the `InteractsWithSockets` trait in the event.
 
 ```php
 /**
